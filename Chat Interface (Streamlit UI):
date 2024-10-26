@@ -1,0 +1,37 @@
+import streamlit as st
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+
+# Load the LLM model and tokenizer
+tokenizer = AutoTokenizer.from_pretrained("t5-base")
+model = AutoModelForSeq2SeqLM.from_pretrained("t5-base")
+
+# Function to generate response based on user query and uploaded PDFs
+def generate_response(query, pdf_text):
+    # Preprocess the query and pdf text
+    input_text = f"Question: {query}  Document: {pdf_text}"
+    input_ids = tokenizer.encode(input_text, return_tensors="pt")
+
+    # Generate response using the LLM
+    output_ids = model.generate(input_ids)
+    output_text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
+
+    return output_text
+
+# Streamlit app
+st.title("AI Chat Application")
+
+# Upload PDF
+pdf_file = st.file_uploader("Upload a PDF file", type="pdf")
+
+# User query input
+user_query = st.text_input("Enter your query")
+
+# Button to trigger response generation
+if st.button("Submit"):
+    # Extract text from PDF (using PyPDF2 or similar)
+    pdf_text = extract_text_from_pdf(pdf_file)
+
+    # Generate and display the response
+    response = generate_response(user_query, pdf_text)
+    st.write("Response:")
+    st.write(response)
