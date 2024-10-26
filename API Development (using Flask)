@@ -1,0 +1,17 @@
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+@app.route('/query', methods=['POST'])
+def process_query():
+    data = request.get_json()
+    query = data['query']
+    pdf_text = data['pdf_text']
+
+    # Generate response using RAG pipeline
+    response = generate_response(query, pdf_text)
+
+    return jsonify({'response': response})
+
+if __name__ == '__main__':
+    app.run(debug=True)
