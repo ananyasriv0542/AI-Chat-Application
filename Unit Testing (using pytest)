@@ -1,0 +1,18 @@
+import pytest
+from your_module import generate_response, extract_text_from_pdf
+
+@pytest.fixture
+def sample_pdf():
+    # Load a sample PDF file
+    with open('sample.pdf', 'rb') as f:
+        return f.read()
+
+def test_extract_text_from_pdf(sample_pdf):
+    text = extract_text_from_pdf(sample_pdf)
+    assert len(text) > 0
+
+def test_generate_response():
+    query = "What is the main topic of the PDF?"
+    pdf_text = "This is a sample PDF about AI."
+    response = generate_response(query, pdf_text)
+    assert "AI" in response
