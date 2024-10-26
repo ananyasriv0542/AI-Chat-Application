@@ -1,0 +1,5 @@
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+
+# Load the LLM model and tokenizer
+tokenizer = AutoTokenizer.from_pretrained("t5-base")
+model = AutoModelForSeq2SeqLM.from_pretrained("t5-base")
