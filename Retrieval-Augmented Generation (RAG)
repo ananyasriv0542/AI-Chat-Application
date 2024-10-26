@@ -1,0 +1,18 @@
+from haystack import DocumentStore, Pipeline
+
+# Initialize a document store (e.g., Elasticsearch)
+document_store = ElasticsearchDocumentStore()
+
+# Index the PDF text
+document_store.write_documents([
+    {"text": pdf_text}
+])
+
+# Create a RAG pipeline
+pipeline = Pipeline()
+pipeline.add_node(component=Retriever(document_store=document_store))
+pipeline.add_node(component=Generator())
+
+# Use the pipeline to generate responses
+result = pipeline.run(query=user_query, params={"Retriever": {"top_k": 5}})
+response = result["answers"][0]["answer"]
